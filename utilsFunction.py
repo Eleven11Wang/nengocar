@@ -6,7 +6,7 @@ import nengo
 import random
 import nengo_dl
 import numpy as np
-#import seaborn as sns
+import seaborn as sns
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -16,7 +16,7 @@ from skimage.transform import rescale, resize, downscale_local_mean
 def read_img(name, h, w):
     path = name
     img = plt.imread(path)
-    # img = irgb2gray(img)
+    img = irgb2gray(img)
 
     img = resize(img, (h, w))
     img = img * 255

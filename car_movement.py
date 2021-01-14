@@ -1,5 +1,5 @@
 import time
-import HiwonderSDK.Board as Board
+#import HiwonderSDK.Board as Board
 def car_act_not_found():
     step =0
     cnt = 0 

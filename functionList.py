@@ -6,7 +6,7 @@ import nengo
 import random
 import nengo_dl
 import numpy as np
-#import seaborn as sns
+import seaborn as sns
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -17,6 +17,11 @@ import dlModel
 
 
 def processing_image(image, h, w):
+
+
+    image = resize(image, (h, w))
+    image = image * 255
+    image = image.astype(int)
     #image = func.read_img(name, h, w)
     img_gray = func.rgb2gray(image)
     img_gray_localization = func.rgb2gray(image)
@@ -46,15 +51,15 @@ def processing_image(image, h, w):
     img_gray_localization[erosion_Cb == 0] = 0
     # img_gray_localization[erosion_Cr==0]=0
 
-    #fig, axs = plt.subplots(2, 2, figsize=(10, 10), facecolor='w', edgecolor='k')
-    #axs = axs.ravel()
-    #sns.heatmap(erosion_Cr,ax=axs[0])
-    #sns.heatmap(erosion_Cb,ax=axs[1])
-    #sns.heatmap(img_gray_localization, ax=axs[2])
-    #sns.heatmap(img_gray,ax=axs[3])
-    #plt.tight_layout()
-    #plt.savefig("test_region_{}.{}.png".format(h,w))
-    #plt.close()
+    fig, axs = plt.subplots(2, 2, figsize=(10, 10), facecolor='w', edgecolor='k')
+    axs = axs.ravel()
+    sns.heatmap(erosion_Cr,ax=axs[0])
+    sns.heatmap(erosion_Cb,ax=axs[1])
+    sns.heatmap(img_gray_localization, ax=axs[2])
+    sns.heatmap(img_gray,ax=axs[3])
+    plt.tight_layout()
+    plt.savefig("test_region_{}.{}.png".format(h,w))
+    plt.close()
     return img_gray, img_gray_localization
 
 
@@ -75,7 +80,7 @@ def find_link_area(arr):
 
                 else:
                     for pos, v in arr_dict.items():
-                        if abs(pos[0] * h - i) < (0.2 * h) or abs(pos[1] * w - j) < (0.2 * w):
+                        if abs(pos[0] * h - i) < (0.1 * h) or abs(pos[1] * w - j) < (0.1 * w):
                             pos_to_add = pos
                         else:
                             pos_to_add = (i / h, j / w)
@@ -103,7 +108,7 @@ def filter_processed_area(arr_dict, arr_pos_dict, processed_image, round_num):
     new_processed_image = processed_image[:, :]
     round_num = round_num + 1
     small_remove = 28 * 28 * round_num
-    big_remove = 28 * 28 * round_num ** round_num
+    big_remove = 28 * 28 * round_num **round_num
     #print(round_num-1,small_remove,big_remove)
     def remove_area(r_pos):
         pos_ls = arr_pos_dict[r_pos]
@@ -132,12 +137,12 @@ def filter_processed_area(arr_dict, arr_pos_dict, processed_image, round_num):
 def re_process_processed_img(processed_image,round_num):
     processed_image[processed_image > 1] = 1
     arr_dict, arr_pos_dict = find_link_area(processed_image)
-    #print(arr_dict)
+    print(arr_dict)
     new_processed_image = filter_processed_area(arr_dict, arr_pos_dict, processed_image, round_num)
-    #fig = plt.figure()
-    #sns.heatmap(new_processed_image)
-    #plt.savefig("processed_area_{}.png".format(round_num))
-    #plt.close()
+    fig = plt.figure()
+    sns.heatmap(new_processed_image)
+    plt.savefig("processed_area_{}.png".format(round_num))
+    plt.close()
     return new_processed_image
 
 
