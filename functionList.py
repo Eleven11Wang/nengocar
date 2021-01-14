@@ -16,8 +16,8 @@ import utilsFunction as func
 import dlModel
 
 
-def processing_image(name, h, w):
-    image = func.read_img(name, h, w)
+def processing_image(image, h, w):
+    #image = func.read_img(name, h, w)
     img_gray = func.rgb2gray(image)
     img_gray_localization = func.rgb2gray(image)
     YUV = func.RGB2YUV(image)
@@ -84,10 +84,10 @@ def find_link_area(arr):
                     arr_pos_dict[pos_to_add]=[(int(pos_to_add[0]*h),int(pos_to_add[1]*w))]
 
             while i< h and j < w and (arr[i, j] == 1):
-                j += 1
                 arr_dict[pos_to_add] += 1
                 arr_pos_dict[pos_to_add].append((i,j))
                 cnt += 1
+                j += 1
             j += 1
             cnt += 1
         i += 1

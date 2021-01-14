@@ -68,7 +68,9 @@ def car_movement():
         else:
             leftv =50
             rightv = 54
-        print(t,leftv,rightv)
+        if int(time.time()*10)%2==1:
+            leftv =0
+            rightv = 0
         Board.setMotor(1, leftv)
         Board.setMotor(2, rightv)
 
@@ -101,7 +103,7 @@ def make_movement(rt_val):
 #         rotation_probe_delayed = nengo.Probe(delayedmovement, synapse =None)
 #         dx_probe= nengo.Probe(dx_movement,synapse=None)
     sim = nengo.Simulator(model, progress_bar=False)
-    sim.run(2, progress_bar=True)
+    sim.run(0.5, progress_bar=True)
 #
 
 
